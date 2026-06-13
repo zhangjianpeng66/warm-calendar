@@ -20,7 +20,7 @@ export function WeekView() {
   const [newTitle, setNewTitle] = useState('')
   const [newCategory, setNewCategory] = useState<Category>('生活')
   const [newPriority, setNewPriority] = useState<Priority>('中')
-  const [newTimeSlot, setNewTimeSlot] = useState('')
+  const [newTimeSlot, setNewTimeSlot] = useState<string | undefined>(undefined)
   const [showCelebration, setShowCelebration] = useState(false)
   const prevCompletedRef = useRef(0)
 

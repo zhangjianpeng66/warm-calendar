@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { format, subMonths, addMonths } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { ChevronLeft, ChevronRight, Plus, Link2, Target, Sparkles, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, Link2, Sparkles, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
