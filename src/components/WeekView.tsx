@@ -22,7 +22,8 @@ export function WeekView() {
   const [newPriority, setNewPriority] = useState<Priority>('中')
   const [newTimeSlot, setNewTimeSlot] = useState<string | undefined>(undefined)
   const [showCelebration, setShowCelebration] = useState(false)
-  const prevCompletedRef = useRef(0)
+  // 记录上一次渲染时已完成的任务 ID 集合（避免页面刷新/切换时误触发）
+  const prevCompletedIdsRef = useRef<Set<string> | null>(null)
 
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
@@ -63,13 +64,26 @@ export function WeekView() {
     await loadTasks()
   }
 
-  // 检测今日任务全完成 → 触发庆祝
+  // 检测今日任务全完成 → 触发庆祝（仅在新完成时触发一次）
   useEffect(() => {
-    const completed = todayTasks.filter(t => t.completed).length
-    if (todayTasks.length > 0 && completed === todayTasks.length && prevCompletedRef.current < todayTasks.length) {
+    const completedIds = new Set(todayTasks.filter(t => t.completed).map(t => t.id))
+    const allDone = todayTasks.length > 0 && completedIds.size === todayTasks.length
+
+    // 首次加载：只记录状态，不触发
+    if (prevCompletedIdsRef.current === null) {
+      prevCompletedIdsRef.current = completedIds
+      return
+    }
+
+    // 检查是否有新完成的任务（之前不在集合中，现在在）
+    const prevIds = prevCompletedIdsRef.current
+    const hasNewCompletion = Array.from(completedIds).some(id => !prevIds.has(id))
+
+    prevCompletedIdsRef.current = completedIds
+
+    if (allDone && hasNewCompletion) {
       setShowCelebration(true)
     }
-    prevCompletedRef.current = completed
   }, [todayTasks])
 
   // 删除任务
