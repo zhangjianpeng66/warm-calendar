@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { randomEncouragement } from '@/data/constants'
 import type { CelebrationLevel } from '@/data/types'
@@ -9,7 +9,6 @@ interface Props {
   onClose: () => void
 }
 
-// 简单纸屑粒子
 function Confetti({ count = 40 }: { count?: number }) {
   const colors = ['#f59e0b', '#10b981', '#ec4899', '#8b5cf6', '#3b82f6', '#f43f5e', '#06b6d4']
 
@@ -53,13 +52,20 @@ function Confetti({ count = 40 }: { count?: number }) {
 export function CelebrationOverlay({ show, level, onClose }: Props) {
   const [text] = useState(() => randomEncouragement(level))
   const particleCount = level === 'day' ? 40 : level === 'month' ? 80 : 120
+  const onCloseRef = useRef(onClose)
+
+  // 保持 onClose 引用最新，但不触发 effect 重新执行
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
 
   useEffect(() => {
-    if (show) {
-      const timer = setTimeout(onClose, level === 'day' ? 4000 : level === 'month' ? 6000 : 8000)
-      return () => clearTimeout(timer)
-    }
-  }, [show, level, onClose])
+    if (!show) return
+    const timer = setTimeout(() => {
+      onCloseRef.current()
+    }, level === 'day' ? 4000 : level === 'month' ? 6000 : 8000)
+    return () => clearTimeout(timer)
+  }, [show, level]) // 不再依赖 onClose，避免重复触发
 
   return (
     <AnimatePresence>
@@ -69,7 +75,7 @@ export function CelebrationOverlay({ show, level, onClose }: Props) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[9998] bg-background/60 backdrop-blur-sm flex items-center justify-center"
-          onClick={onClose}
+          onClick={() => onCloseRef.current()}
         >
           <Confetti count={particleCount} />
           <motion.div
@@ -99,7 +105,7 @@ export function CelebrationOverlay({ show, level, onClose }: Props) {
             )}
 
             <button
-              onClick={onClose}
+              onClick={() => onCloseRef.current()}
               className="mt-6 text-sm text-primary font-medium hover:underline"
             >
               {level === 'day' ? '继续加油 →' : '太好了！'}

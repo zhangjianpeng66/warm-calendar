@@ -196,23 +196,28 @@ export function MonthPlan() {
               autoFocus
               className="border-amber-200 focus:border-amber-400"
             />
-            {yearlyGoals.filter(y => !y.completed).length > 0 && (
-              <div className="flex gap-2 items-center bg-white/50 rounded-xl px-3 py-2">
-                <Link2 size={14} className="text-primary shrink-0" />
+            {/* 关联年度目标 - 始终显示 */}
+            <div className="flex gap-2 items-center bg-white/50 rounded-xl px-3 py-2">
+              <Link2 size={14} className="text-primary shrink-0" />
+              {yearlyGoals.filter(y => !y.completed).length > 0 ? (
                 <select
                   value={linkingYearlyId || ''}
                   onChange={e => setLinkingYearlyId(e.target.value || undefined)}
                   className="flex-1 bg-transparent text-sm outline-none"
                 >
-                  <option value="">独立月度目标</option>
+                  <option value="">不关联（独立月度目标）</option>
                   {yearlyGoals.filter(y => !y.completed).map(y => (
                     <option key={y.id} value={y.id}>
-                      关联：{y.title}
+                      🔗 {y.title} ({y.startYear}-{y.endYear})
                     </option>
                   ))}
                 </select>
-              </div>
-            )}
+              ) : (
+                <p className="text-xs text-muted-foreground flex-1">
+                  暂无年度目标，去「年规划」创建一个吧 📝
+                </p>
+              )}
+            </div>
             <div className="flex gap-2 justify-end">
               <Button size="sm" variant="ghost" onClick={() => { setShowAdd(false); setLinkingYearlyId(undefined) }}>
                 取消
