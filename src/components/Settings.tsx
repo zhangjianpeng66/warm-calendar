@@ -198,7 +198,7 @@ export function Settings() {
         {/* 关于 */}
         <section className="text-center pt-4">
           <p className="text-xs text-muted-foreground">
-            一小步 v1.3 · 每一步都算数
+            一小步 v1.3.1 · 每一步都算数
           </p>
         </section>
       </div>
