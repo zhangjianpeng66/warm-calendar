@@ -42,7 +42,8 @@ export interface MonthlyGoal {
 export interface YearlyGoal {
   id: string
   title: string
-  year: number
+  startYear: number
+  endYear: number
   completed: boolean
   monthlyMilestones: string[] // MonthlyGoal id[]
   createdAt: string

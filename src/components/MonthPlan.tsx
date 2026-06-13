@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { format, subMonths, addMonths } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
-import { ChevronLeft, ChevronRight, Plus, Link2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Plus, Link2, Target, Sparkles, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -9,6 +9,29 @@ import { CelebrationOverlay } from '@/components/CelebrationOverlay'
 import { db } from '@/data/db'
 import type { MonthlyGoal, YearlyGoal } from '@/data/types'
 import { cn } from '@/lib/utils'
+
+// 可爱进度条组件
+function CuteProgress({ rate, emoji }: { rate: number; emoji: string }) {
+  if (rate === 0) return null
+  const messages = rate >= 100 ? '完美！🎉' : rate >= 70 ? '加油！💪' : rate >= 40 ? '继续努力 🌱' : '刚开始呢 🌟'
+  return (
+    <div className="px-4 mb-3">
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-xs text-muted-foreground flex items-center gap-1">
+          {emoji} 月度进度
+        </span>
+        <span className="text-xs font-bold text-primary">{rate}%</span>
+      </div>
+      <div className="h-3 rounded-full bg-muted overflow-hidden relative">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-700"
+          style={{ width: `${Math.max(rate, 3)}%` }}
+        />
+      </div>
+      <p className="text-xs text-center text-muted-foreground mt-0.5">{messages}</p>
+    </div>
+  )
+}
 
 export function MonthPlan() {
   const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -25,11 +48,11 @@ export function MonthPlan() {
   const loadData = useCallback(async () => {
     const [g, y] = await Promise.all([
       db.monthlyGoals.where('month').equals(monthKey).toArray(),
-      db.yearlyGoals.where('year').equals(currentMonth.getFullYear()).toArray(),
+      db.yearlyGoals.toArray(),  // 取全部年度目标，跨年份关联
     ])
     setGoals(g)
     setYearlyGoals(y)
-  }, [monthKey, currentMonth])
+  }, [monthKey])
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -45,7 +68,6 @@ export function MonthPlan() {
       updatedAt: new Date().toISOString(),
     }
     await db.monthlyGoals.add(goal)
-    // 如果关联了年度目标，更新年度目标的里程碑
     if (linkingYearlyId) {
       const yearly = await db.yearlyGoals.get(linkingYearlyId)
       if (yearly) {
@@ -61,18 +83,25 @@ export function MonthPlan() {
   }
 
   const toggleGoal = async (id: string) => {
-    const goal = goals.find(g => g.id === id)!
+    const goal = monthGoals.find(g => g.id === id)!
     await db.monthlyGoals.update(id, { completed: !goal.completed, updatedAt: new Date().toISOString() })
     await loadData()
-    // 检查是否全部完成
-    const updated = goals.map(g => g.id === id ? { ...g, completed: !g.completed } : g)
-    if (updated.filter(g => g.month === monthKey).length > 0 &&
-        updated.filter(g => g.month === monthKey).every(g => g.completed)) {
+    const updated = monthGoals.map(g => g.id === id ? { ...g, completed: !g.completed } : g)
+    if (updated.length > 0 && updated.every(g => g.completed)) {
       setShowCelebration(true)
     }
   }
 
   const deleteGoal = async (id: string) => {
+    const goal = monthGoals.find(g => g.id === id)
+    if (goal?.linkedYearlyGoalId) {
+      const yearly = await db.yearlyGoals.get(goal.linkedYearlyGoalId)
+      if (yearly) {
+        await db.yearlyGoals.update(goal.linkedYearlyGoalId, {
+          monthlyMilestones: yearly.monthlyMilestones.filter(mid => mid !== id)
+        })
+      }
+    }
     await db.monthlyGoals.delete(id)
     await loadData()
   }
@@ -84,15 +113,15 @@ export function MonthPlan() {
   return (
     <div className="flex flex-col h-full">
       <header className="px-4 pt-3 pb-2 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">
-          {format(currentMonth, 'yyyy年M月', { locale: zhCN })} · 月计划
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <span>📅</span> {format(currentMonth, 'yyyy年M月', { locale: zhCN })}
         </h2>
         <div className="flex gap-1">
           <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(m => subMonths(m, 1))}>
             <ChevronLeft size={18} />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(new Date())}>
-            <span className="text-xs font-bold">今</span>
+            <span className="text-xs font-bold bg-primary/10 px-1.5 py-0.5 rounded-full">今月</span>
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setCurrentMonth(m => addMonths(m, 1))}>
             <ChevronRight size={18} />
@@ -100,31 +129,14 @@ export function MonthPlan() {
         </div>
       </header>
 
-      {/* 进度条 */}
-      {monthGoals.length > 0 && (
-        <div className="px-4 mb-3">
-          <div className="flex justify-between text-xs text-muted-foreground mb-1">
-            <span>月度进度</span>
-            <span>{completeRate}%</span>
-          </div>
-          <div className="h-2 rounded-full bg-muted overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
-              style={{ width: `${completeRate}%` }}
-            />
-          </div>
-        </div>
-      )}
+      <CuteProgress rate={completeRate} emoji="🎯" />
 
-      {/* 目标列表 */}
-      <div className="flex-1 overflow-y-auto px-3 space-y-2">
+      <div className="flex-1 overflow-y-auto px-3 space-y-2.5">
         {monthGoals.length === 0 && !showAdd && (
-          <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-            <span className="text-4xl mb-2">🎯</span>
-            <p className="text-sm">本月还没有计划</p>
-            <Button variant="link" size="sm" onClick={() => setShowAdd(true)} className="mt-1">
-              设定月度目标
-            </Button>
+          <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+            <span className="text-6xl mb-4">🌙</span>
+            <p className="text-sm font-medium">这个月还是一张白纸</p>
+            <p className="text-xs mt-1">写下你想做的事，让每个月都有意义</p>
           </div>
         )}
 
@@ -136,81 +148,94 @@ export function MonthPlan() {
             <div
               key={goal.id}
               className={cn(
-                'flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card',
-                goal.completed && 'opacity-60'
+                'flex items-center gap-3 p-3.5 rounded-2xl border-2 transition-all duration-300',
+                'bg-card hover:shadow-md hover:-translate-y-0.5',
+                goal.completed
+                  ? 'border-emerald-200 bg-emerald-50/50'
+                  : 'border-amber-100 hover:border-amber-200'
               )}
             >
               <Checkbox
                 checked={goal.completed}
                 onCheckedChange={() => toggleGoal(goal.id)}
-                className="data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                className="shrink-0 w-5 h-5 data-[state=checked]:bg-emerald-400 data-[state=checked]:border-emerald-400"
               />
               <div className="flex-1 min-w-0">
-                <span className={cn('text-sm', goal.completed && 'line-through text-muted-foreground')}>
+                <span className={cn(
+                  'text-sm font-medium',
+                  goal.completed && 'line-through text-muted-foreground'
+                )}>
                   {goal.title}
                 </span>
                 {linkedYearly && (
-                  <div className="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground">
-                    <Link2 size={10} />
-                    关联：{linkedYearly.title}
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                      🏆 {linkedYearly.title}
+                    </span>
                   </div>
                 )}
               </div>
               <button
                 onClick={() => deleteGoal(goal.id)}
-                className="text-xs text-muted-foreground hover:text-red-500 transition-colors"
+                className="shrink-0 p-1.5 rounded-lg opacity-30 hover:opacity-100 hover:bg-red-50 text-muted-foreground hover:text-red-400 transition-all"
               >
-                删除
+                <Trash2 size={14} />
               </button>
             </div>
           )
         })}
 
-        {/* 添加表单 */}
+        {/* 添加表单 - 始终可展开 */}
         {showAdd && (
-          <div className="p-3 rounded-xl border border-dashed border-primary/50 bg-primary/5 space-y-2">
+          <div className="rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 p-4 space-y-3 animate-in slide-in-from-top-2">
             <Input
-              placeholder="月度目标…"
+              placeholder="这个月想完成什么？✨"
               value={newTitle}
               onChange={e => setNewTitle(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && addGoal()}
               autoFocus
+              className="border-amber-200 focus:border-amber-400"
             />
-            {/* 关联年度目标 */}
-            {yearlyGoals.length > 0 && (
-              <div className="flex gap-2 items-center">
-                <Link2 size={14} className="text-muted-foreground shrink-0" />
+            {yearlyGoals.filter(y => !y.completed).length > 0 && (
+              <div className="flex gap-2 items-center bg-white/50 rounded-xl px-3 py-2">
+                <Link2 size={14} className="text-primary shrink-0" />
                 <select
                   value={linkingYearlyId || ''}
                   onChange={e => setLinkingYearlyId(e.target.value || undefined)}
-                  className="flex-1 rounded-lg border bg-background px-2 py-1 text-sm"
+                  className="flex-1 bg-transparent text-sm outline-none"
                 >
-                  <option value="">不关联年度目标</option>
-                  {yearlyGoals.map(y => (
+                  <option value="">独立月度目标</option>
+                  {yearlyGoals.filter(y => !y.completed).map(y => (
                     <option key={y.id} value={y.id}>
-                      {y.title} {y.completed ? '✅' : ''}
+                      关联：{y.title}
                     </option>
                   ))}
                 </select>
               </div>
             )}
             <div className="flex gap-2 justify-end">
-              <Button size="sm" variant="ghost" onClick={() => setShowAdd(false)}>取消</Button>
-              <Button size="sm" onClick={addGoal}>添加</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setShowAdd(false); setLinkingYearlyId(undefined) }}>
+                取消
+              </Button>
+              <Button size="sm" onClick={addGoal} className="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 border-0">
+                <Sparkles size={14} className="mr-1" /> 添加
+              </Button>
             </div>
           </div>
         )}
-
-        {!showAdd && (
-          <Button
-            variant="ghost"
-            className="w-full text-muted-foreground"
-            onClick={() => setShowAdd(true)}
-          >
-            <Plus size={14} className="mr-1" />添加月度目标
-          </Button>
-        )}
       </div>
+
+      {/* 固定在底部的添加按钮 */}
+      {!showAdd && (
+        <div className="p-3 border-t border-border/30 bg-card/80 backdrop-blur-sm">
+          <Button
+            onClick={() => setShowAdd(true)}
+            className="w-full h-12 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-base shadow-lg shadow-amber-200/50 border-0"
+          >
+            <Plus size={20} className="mr-2" /> 添加月度目标
+          </Button>
+        </div>
+      )}
 
       <CelebrationOverlay show={showCelebration} level="month" onClose={() => setShowCelebration(false)} />
     </div>

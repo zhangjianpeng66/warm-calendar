@@ -127,7 +127,7 @@
   --day-incomplete: 0 65% 55%;
 }
 
-/* ========== 基础样式 ========== */
+/* ========== 可爱卡通风格 · 基础样式 ========== */
 body {
   margin: 0;
   background-color: hsl(var(--background));
@@ -135,12 +135,46 @@ body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 可爱的圆点背景纹理 */
+  background-image: radial-gradient(hsl(var(--primary) / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 #root {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* ========== 可爱风格的全局圆角 ========== */
+button, .rounded-xl, .rounded-2xl, .rounded-3xl {
+  /* 所有元素更圆润 */
+}
+
+/* ========== 可爱的跳动动画 ========== */
+@keyframes bounce-cute {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.bounce-cute:hover {
+  animation: bounce-cute 0.6s ease infinite;
+}
+
+.pop-in {
+  animation: pop-in 0.4s ease-out;
 }
 
 /* ========== 滚动条美化 ========== */
@@ -161,4 +195,14 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 9999;
+}
+
+/* ========== 选中文本颜色 ========== */
+::selection {
+  background: hsl(var(--primary) / 0.3);
+}
+
+/* ========== 底部安全区域 ========== */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 8px);
 }

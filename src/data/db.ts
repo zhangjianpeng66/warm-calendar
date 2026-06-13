@@ -11,11 +11,11 @@ export class WarmCalendarDB extends Dexie {
 
   constructor() {
     super('WarmCalendarDB')
-    this.version(1).stores({
+    this.version(2).stores({
       tasks: 'id, date, category, completed',
       recurringRules: 'id, taskTemplateId',
       monthlyGoals: 'id, month',
-      yearlyGoals: 'id, year',
+      yearlyGoals: 'id, startYear, endYear',
       settings: 'id'
     })
   }

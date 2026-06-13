@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { TaskItem } from '@/components/TaskItem'
+import { TimePicker } from '@/components/TimePicker'
 import { CelebrationOverlay } from '@/components/CelebrationOverlay'
 import { db } from '@/data/db'
 import type { Task, Category, Priority, DayStats } from '@/data/types'
@@ -191,7 +192,11 @@ export function WeekView() {
               </p>
             )}
           </div>
-          <Button size="sm" variant="outline" onClick={() => setShowAdd(!showAdd)}>
+          <Button
+            size="sm"
+            onClick={() => setShowAdd(!showAdd)}
+            className="rounded-full bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-bold border-0 shadow-md shadow-amber-200/50 px-4"
+          >
             <Plus size={14} className="mr-1" />添加
           </Button>
         </div>
@@ -206,13 +211,8 @@ export function WeekView() {
               onKeyDown={e => e.key === 'Enter' && addTask()}
               autoFocus
             />
-            <div className="flex gap-2">
-              <Input
-                placeholder="时间段 (可选)"
-                value={newTimeSlot}
-                onChange={e => setNewTimeSlot(e.target.value)}
-                className="w-36"
-              />
+            <div className="flex items-center gap-2">
+              <TimePicker value={newTimeSlot} onChange={setNewTimeSlot} />
               <select
                 value={newCategory}
                 onChange={e => setNewCategory(e.target.value as Category)}
