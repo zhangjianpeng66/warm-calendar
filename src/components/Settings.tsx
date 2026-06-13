@@ -5,12 +5,11 @@ import { db } from '@/data/db'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Download, Upload, FileText, Image, Palette, Check } from 'lucide-react'
-import type { ThemeId } from '@/data/types'
 import { cn } from '@/lib/utils'
 
 export function Settings() {
   const { settings, setTheme } = useApp()
-  const [exporting, setExporting] = useState(false)
+  const setExporting = useState(false)[1]
 
   // 导出 JSON 备份
   const exportJSON = async () => {

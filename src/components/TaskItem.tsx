@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Trash2, GripVertical } from 'lucide-react'
@@ -25,8 +24,6 @@ interface Props {
 }
 
 export function TaskItem({ task, onToggle, onDelete }: Props) {
-  const [swiped, setSwiped] = useState(false)
-
   return (
     <div
       className={cn(
