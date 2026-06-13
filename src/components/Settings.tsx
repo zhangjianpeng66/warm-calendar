@@ -1,15 +1,38 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApp } from '@/hooks/useApp'
 import { THEMES } from '@/data/constants'
 import { db } from '@/data/db'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Download, Upload, FileText, Image, Palette, Check } from 'lucide-react'
+import { Download, Upload, FileText, Image, Palette, Check, Smartphone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function Settings() {
   const { settings, setTheme } = useApp()
   const setExporting = useState(false)[1]
+  const [installPrompt, setInstallPrompt] = useState<any>(null)
+
+  // 监听 PWA 安装事件
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault()
+      setInstallPrompt(e)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  const handleInstall = async () => {
+    if (installPrompt) {
+      await installPrompt.prompt()
+      const result = await installPrompt.userChoice
+      if (result.outcome === 'accepted') {
+        setInstallPrompt(null)
+      }
+    } else {
+      alert('请使用 Chrome 浏览器，点右上角 ⋮ → 添加到主屏幕')
+    }
+  }
 
   // 导出 JSON 备份
   const exportJSON = async () => {
@@ -154,6 +177,23 @@ export function Settings() {
             从 JSON 文件恢复数据
           </Button>
         </section>
+
+        {/* PWA 安装 */}
+        {installPrompt && (
+          <section>
+            <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+              <Smartphone size={14} />添加到桌面
+            </h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleInstall}
+              className="w-full h-12 rounded-2xl text-base font-medium border-2 border-primary/30 hover:bg-primary/5"
+            >
+              🏠 安装「一小步」到手机桌面
+            </Button>
+          </section>
+        )}
 
         {/* 关于 */}
         <section className="text-center pt-4">

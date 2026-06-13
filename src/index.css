@@ -196,82 +196,107 @@ body {
   position: relative;
 }
 
-/* ========== 主题装饰背景（简洁点缀） ========== */
+/* ========== 主题装饰背景 ========== */
 
-/* 向日葵：小太阳圆点 */
+/* 向日葵：明亮金黄 + 太阳点缀 */
 :root body,
 [data-theme=""] body {
+  background-color: #fff9e6;
   background-image:
-    radial-gradient(circle at 15% 12%, hsl(48, 100%, 60%) 0px, transparent 18px),
-    radial-gradient(circle at 85% 8%, hsl(38, 90%, 55%) 0px, transparent 14px),
-    radial-gradient(hsl(42, 80%, 60% / 0.06) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 24px 24px;
-  background-repeat: no-repeat, no-repeat, repeat;
+    radial-gradient(circle at 12% 6%, #fbbf24 0px, #fbbf24 2px, transparent 22px),
+    radial-gradient(circle at 88% 5%, #f59e0b 0px, #f59e0b 2px, transparent 18px),
+    radial-gradient(circle at 50% 10%, #fcd34d 0px, #fcd34d 1.5px, transparent 14px),
+    radial-gradient(circle at 92% 90%, #fbbf24 0px, #fbbf24 2.5px, transparent 24px),
+    repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(251,191,36,0.04) 30px, rgba(251,191,36,0.04) 31px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, auto;
 }
 
-/* 樱花：粉色花瓣点 */
+/* 樱花：粉色花瓣主题 */
 [data-theme="sakura"] body {
+  background-color: #fff5f7;
   background-image:
-    radial-gradient(circle at 12% 10%, hsl(340, 65%, 75% / 0.4) 0px, transparent 20px),
-    radial-gradient(circle at 88% 7%, hsl(350, 55%, 70% / 0.35) 0px, transparent 16px),
-    radial-gradient(circle at 50% 14%, hsl(340, 60%, 72% / 0.2) 0px, transparent 12px),
-    radial-gradient(hsl(340, 30%, 75% / 0.06) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
-  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    radial-gradient(circle at 10% 5%, #f9a8d4 0px, #f9a8d4 3px, transparent 25px),
+    radial-gradient(circle at 90% 8%, #f472b6 0px, #f472b6 2px, transparent 20px),
+    radial-gradient(circle at 45% 12%, #fbcfe8 0px, #fbcfe8 2.5px, transparent 16px),
+    radial-gradient(circle at 15% 88%, #fda4af 0px, #fda4af 3px, transparent 22px),
+    radial-gradient(circle at 85% 85%, #f9a8d4 0px, #f9a8d4 2px, transparent 18px),
+    repeating-linear-gradient(0deg, transparent, transparent 32px, rgba(244,114,182,0.04) 32px, rgba(244,114,182,0.04) 33px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, auto;
 }
 
-/* 新绿：小草点缀 */
+/* 新绿：小草绿叶点缀 */
 [data-theme="fresh"] body {
+  background-color: #f2fdf5;
   background-image:
-    radial-gradient(ellipse at 10% 10%, hsl(142, 50%, 50% / 0.25) 0px, transparent 16px),
-    radial-gradient(ellipse at 90% 12%, hsl(130, 40%, 55% / 0.2) 0px, transparent 12px),
-    radial-gradient(hsl(140, 30%, 55% / 0.05) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 20px 20px;
-  background-repeat: no-repeat, no-repeat, repeat;
+    radial-gradient(ellipse at 8% 5%, #4ade80 0px, #4ade80 2px, transparent 20px),
+    radial-gradient(ellipse at 92% 6%, #22c55e 0px, #22c55e 2.5px, transparent 18px),
+    radial-gradient(ellipse at 50% 10%, #86efac 0px, #86efac 1.5px, transparent 14px),
+    radial-gradient(ellipse at 18% 90%, #4ade80 0px, #4ade80 2px, transparent 22px),
+    radial-gradient(ellipse at 78% 88%, #22c55e 0px, #22c55e 2.5px, transparent 20px),
+    repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(74,222,128,0.04) 28px, rgba(74,222,128,0.04) 29px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, auto;
 }
 
-/* 晚霞：太阳与海交界渐变色 */
+/* 晚霞：海天交融渐变 */
 [data-theme="sunset"] body {
   background-image:
-    linear-gradient(180deg,
-      hsl(22, 50%, 95%) 0%,
-      hsl(18, 55%, 92%) 40%,
-      hsl(15, 60%, 85%) 65%,
-      hsl(200, 30%, 80%) 85%,
-      hsl(200, 35%, 72%) 100%
+    linear-gradient(175deg,
+      #fff5eb 0%,
+      #fed7aa 30%,
+      #fb923c 55%,
+      #f97316 70%,
+      #60a5fa 82%,
+      #3b82f6 100%
     );
+  background-repeat: no-repeat;
   background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-/* 抹茶：茶点小圆 */
+/* 抹茶：抹茶绿 + 茶点装饰 */
 [data-theme="matcha"] body {
+  background-color: #f7faf4;
   background-image:
-    radial-gradient(circle at 15% 10%, hsl(85, 30%, 55% / 0.25) 0px, transparent 18px),
-    radial-gradient(circle at 82% 8%, hsl(82, 25%, 60% / 0.2) 0px, transparent 14px),
-    radial-gradient(hsl(85, 20%, 55% / 0.05) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 20px 20px;
-  background-repeat: no-repeat, no-repeat, repeat;
+    radial-gradient(circle at 12% 6%, #7ba05b 0px, #7ba05b 2px, transparent 22px),
+    radial-gradient(circle at 88% 5%, #5c8a3c 0px, #5c8a3c 2.5px, transparent 20px),
+    radial-gradient(circle at 50% 9%, #a3c293 0px, #a3c293 1.5px, transparent 14px),
+    radial-gradient(circle at 20% 85%, #7ba05b 0px, #7ba05b 2px, transparent 20px),
+    radial-gradient(circle at 82% 88%, #5c8a3c 0px, #5c8a3c 2.5px, transparent 18px),
+    repeating-linear-gradient(135deg, transparent, transparent 34px, rgba(123,160,91,0.04) 34px, rgba(123,160,91,0.04) 35px);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, auto;
 }
 
-/* 星夜：左上角月亮 + 散落星星 */
+/* 星夜：月亮在左上 + 满天星星 */
 [data-theme="starry"] body {
+  background-color: #0f1225;
   background-image:
-    /* 左上角月亮 */
-    radial-gradient(circle at 18% 10%, hsl(42, 90%, 65% / 0.7) 0px, transparent 28px),
-    /* 遮盖月亮暗面 */
-    radial-gradient(circle at 20% 8%, hsl(235, 18%, 10%) 0px, transparent 22px),
-    /* 散落星星 */
-    radial-gradient(1px 1px at 30% 5%, hsl(42, 85%, 70% / 0.8), transparent),
-    radial-gradient(1px 1px at 55% 3%, hsl(220, 60%, 70% / 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 72% 8%, hsl(42, 85%, 72% / 0.7), transparent),
-    radial-gradient(1px 1px at 40% 12%, hsl(220, 55%, 68% / 0.5), transparent),
-    radial-gradient(1px 1px at 88% 4%, hsl(42, 80%, 70% / 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 62% 10%, hsl(220, 60%, 72% / 0.7), transparent),
-    radial-gradient(1px 1px at 50% 15%, hsl(200, 55%, 65% / 0.4), transparent),
-    radial-gradient(1px 1px at 78% 13%, hsl(42, 90%, 68% / 0.5), transparent);
-  background-size: 100% 100%, 100% 100%, 100% 100%;
+    /* 月亮 */
+    radial-gradient(circle at 15% 8%, rgba(251,191,36,0.85) 0px, rgba(251,191,36,0.85) 14px, transparent 26px),
+    radial-gradient(circle at 18% 6%, #0f1225 0px, #0f1225 10px, transparent 18px),
+    /* 亮星 */
+    radial-gradient(1.5px 1.5px at 30% 3%, #fde68a, transparent),
+    radial-gradient(1px 1px at 55% 2%, #c4b5fd, transparent),
+    radial-gradient(1.5px 1.5px at 72% 5%, #fcd34d, transparent),
+    radial-gradient(1px 1px at 40% 8%, #a5b4fc, transparent),
+    radial-gradient(1.5px 1.5px at 88% 3%, #fbbf24, transparent),
+    radial-gradient(1px 1px at 62% 6%, #c4b5fd, transparent),
+    radial-gradient(1.5px 1.5px at 35% 14%, #fde68a, transparent),
+    radial-gradient(1px 1px at 78% 10%, #a5b4fc, transparent),
+    radial-gradient(1px 1px at 15% 18%, #fcd34d, transparent),
+    radial-gradient(1px 1px at 58% 12%, #c4b5fd, transparent),
+    /* 小星 */
+    radial-gradient(0.5px 0.5px at 25% 20%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(0.5px 0.5px at 48% 4%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(0.5px 0.5px at 68% 15%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(0.5px 0.5px at 82% 7%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(0.5px 0.5px at 10% 25%, rgba(255,255,255,0.4), transparent);
   background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
 
 /* ========== 跳动动画 ========== */
