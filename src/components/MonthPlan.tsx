@@ -10,7 +10,6 @@ import { db } from '@/data/db'
 import type { MonthlyGoal, YearlyGoal } from '@/data/types'
 import { cn } from '@/lib/utils'
 
-// 可爱进度条组件
 function CuteProgress({ rate, emoji }: { rate: number; emoji: string }) {
   if (rate === 0) return null
   const messages = rate >= 100 ? '完美！🎉' : rate >= 70 ? '加油！💪' : rate >= 40 ? '继续努力 🌱' : '刚开始呢 🌟'
@@ -22,9 +21,9 @@ function CuteProgress({ rate, emoji }: { rate: number; emoji: string }) {
         </span>
         <span className="text-xs font-bold text-primary">{rate}%</span>
       </div>
-      <div className="h-3 rounded-full bg-muted overflow-hidden relative">
+      <div className="h-3 rounded-full bg-muted overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-700"
+          className="h-full rounded-full progress-themed transition-all duration-700"
           style={{ width: `${Math.max(rate, 3)}%` }}
         />
       </div>
@@ -33,26 +32,38 @@ function CuteProgress({ rate, emoji }: { rate: number; emoji: string }) {
   )
 }
 
+function monthToNum(key: string): number {
+  const [y, m] = key.split('-').map(Number)
+  return y * 12 + m
+}
+
 export function MonthPlan() {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [goals, setGoals] = useState<MonthlyGoal[]>([])
   const [yearlyGoals, setYearlyGoals] = useState<YearlyGoal[]>([])
   const [newTitle, setNewTitle] = useState('')
+  const [newStartMonth, setNewStartMonth] = useState(format(new Date(), 'yyyy-MM'))
+  const [newEndMonth, setNewEndMonth] = useState(format(new Date(), 'yyyy-MM'))
   const [showAdd, setShowAdd] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
   const [linkingYearlyId, setLinkingYearlyId] = useState<string | undefined>(undefined)
 
   const monthKey = format(currentMonth, 'yyyy-MM')
-  const monthGoals = goals.filter(g => g.month === monthKey)
+
+  // 筛选当前月份涉及的目标（startMonth <= monthKey <= endMonth）
+  const monthGoals = goals.filter(g => {
+    const cur = monthToNum(monthKey)
+    return monthToNum(g.startMonth) <= cur && monthToNum(g.endMonth) >= cur
+  })
 
   const loadData = useCallback(async () => {
     const [g, y] = await Promise.all([
-      db.monthlyGoals.where('month').equals(monthKey).toArray(),
-      db.yearlyGoals.toArray(),  // 取全部年度目标，跨年份关联
+      db.monthlyGoals.toArray(), // 取全部，客户端筛选
+      db.yearlyGoals.toArray(),
     ])
     setGoals(g)
     setYearlyGoals(y)
-  }, [monthKey])
+  }, [])
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -61,7 +72,8 @@ export function MonthPlan() {
     const goal: MonthlyGoal = {
       id: crypto.randomUUID(),
       title: newTitle.trim(),
-      month: monthKey,
+      startMonth: newStartMonth,
+      endMonth: newEndMonth,
       completed: false,
       linkedYearlyGoalId: linkingYearlyId,
       createdAt: new Date().toISOString(),
@@ -84,12 +96,13 @@ export function MonthPlan() {
 
   const toggleGoal = async (id: string) => {
     const goal = monthGoals.find(g => g.id === id)!
-    await db.monthlyGoals.update(id, { completed: !goal.completed, updatedAt: new Date().toISOString() })
-    await loadData()
-    const updated = monthGoals.map(g => g.id === id ? { ...g, completed: !g.completed } : g)
-    if (updated.length > 0 && updated.every(g => g.completed)) {
+    const newCompleted = !goal.completed
+    await db.monthlyGoals.update(id, { completed: newCompleted, updatedAt: new Date().toISOString() })
+    const updated = monthGoals.map(g => g.id === id ? { ...g, completed: newCompleted } : g)
+    if (newCompleted && updated.length > 0 && updated.every(g => g.completed)) {
       setShowCelebration(true)
     }
+    await loadData()
   }
 
   const deleteGoal = async (id: string) => {
@@ -144,6 +157,7 @@ export function MonthPlan() {
           const linkedYearly = yearlyGoals.find(y =>
             goal.linkedYearlyGoalId && y.id === goal.linkedYearlyGoalId
           )
+          const isMultiMonth = goal.startMonth !== goal.endMonth
           return (
             <div
               key={goal.id}
@@ -167,13 +181,18 @@ export function MonthPlan() {
                 )}>
                   {goal.title}
                 </span>
-                {linkedYearly && (
-                  <div className="flex items-center gap-1 mt-1">
+                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                  {isMultiMonth && (
                     <span className="text-xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                      {goal.startMonth.split('-')[1]}月 → {goal.endMonth.split('-')[1]}月
+                    </span>
+                  )}
+                  {linkedYearly && (
+                    <span className="text-xs px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-600 font-medium">
                       🏆 {linkedYearly.title}
                     </span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
               <button
                 onClick={() => deleteGoal(goal.id)}
@@ -185,9 +204,8 @@ export function MonthPlan() {
           )
         })}
 
-        {/* 添加表单 - 始终可展开 */}
         {showAdd && (
-          <div className="rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 p-4 space-y-3 animate-in slide-in-from-top-2">
+          <div className="rounded-2xl border-2 border-dashed border-primary/40 bg-primary/5 p-4 space-y-3">
             <Input
               placeholder="这个月想完成什么？✨"
               value={newTitle}
@@ -196,7 +214,17 @@ export function MonthPlan() {
               autoFocus
               className="border-amber-200 focus:border-amber-400"
             />
-            {/* 关联年度目标 - 始终显示 */}
+
+            {/* 月份范围 */}
+            <div className="bg-white/50 rounded-xl p-3">
+              <p className="text-xs text-muted-foreground mb-2">计划周期</p>
+              <MonthRangePicker
+                startMonth={newStartMonth}
+                endMonth={newEndMonth}
+                onChange={(s, e) => { setNewStartMonth(s); setNewEndMonth(e) }}
+              />
+            </div>
+
             <div className="flex gap-2 items-center bg-white/50 rounded-xl px-3 py-2">
               <Link2 size={14} className="text-primary shrink-0" />
               {yearlyGoals.filter(y => !y.completed).length > 0 ? (
@@ -218,10 +246,9 @@ export function MonthPlan() {
                 </p>
               )}
             </div>
+
             <div className="flex gap-2 justify-end">
-              <Button size="sm" variant="ghost" onClick={() => { setShowAdd(false); setLinkingYearlyId(undefined) }}>
-                取消
-              </Button>
+              <Button size="sm" variant="ghost" onClick={() => { setShowAdd(false); setLinkingYearlyId(undefined) }}>取消</Button>
               <Button size="sm" onClick={addGoal} className="bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 border-0">
                 <Sparkles size={14} className="mr-1" /> 添加
               </Button>
@@ -230,11 +257,13 @@ export function MonthPlan() {
         )}
       </div>
 
-      {/* 固定在底部的添加按钮 */}
       {!showAdd && (
         <div className="p-3 border-t border-border/30 bg-card/80 backdrop-blur-sm">
           <Button
-            onClick={() => setShowAdd(true)}
+            onClick={() => {
+              const s = format(currentMonth, 'yyyy-MM')
+              setNewStartMonth(s); setNewEndMonth(s); setShowAdd(true)
+            }}
             className="w-full h-12 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-base shadow-lg shadow-amber-200/50 border-0"
           >
             <Plus size={20} className="mr-2" /> 添加月度目标
@@ -243,6 +272,49 @@ export function MonthPlan() {
       )}
 
       <CelebrationOverlay show={showCelebration} level="month" onClose={() => setShowCelebration(false)} />
+    </div>
+  )
+}
+
+export function MonthRangePicker({ startMonth, endMonth, onChange }: {
+  startMonth: string
+  endMonth: string
+  onChange: (start: string, end: string) => void
+}) {
+  const months = (() => {
+    const now = new Date()
+    const result: { key: string; label: string }[] = []
+    for (let i = -3; i < 24; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth() + i, 1)
+      result.push({
+        key: format(d, 'yyyy-MM'),
+        label: format(d, 'yyyy年M月', { locale: zhCN })
+      })
+    }
+    return result
+  })()
+
+  return (
+    <div className="flex items-center gap-2">
+      <select
+        value={startMonth}
+        onChange={e => onChange(e.target.value, endMonth >= e.target.value ? endMonth : e.target.value)}
+        className="rounded-xl border bg-background px-3 py-2 text-sm appearance-none text-center"
+      >
+        {months.map(m => (
+          <option key={m.key} value={m.key}>{m.label}</option>
+        ))}
+      </select>
+      <span className="text-muted-foreground text-sm">至</span>
+      <select
+        value={endMonth}
+        onChange={e => onChange(startMonth, e.target.value)}
+        className="rounded-xl border bg-background px-3 py-2 text-sm appearance-none text-center"
+      >
+        {months.filter(m => m.key >= startMonth).map(m => (
+          <option key={m.key} value={m.key}>{m.label}</option>
+        ))}
+      </select>
     </div>
   )
 }

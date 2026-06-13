@@ -158,7 +158,7 @@ export function Settings() {
         {/* 关于 */}
         <section className="text-center pt-4">
           <p className="text-xs text-muted-foreground">
-            温暖日历 v1.0 · 用心记录每一天
+            一小步 v1.3 · 每一步都算数
           </p>
         </section>
       </div>

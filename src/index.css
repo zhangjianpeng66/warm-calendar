@@ -1,133 +1,185 @@
 @import "tailwindcss";
 
-/* ========== 温暖日历 · 主题系统 ========== */
+/* ========== 一小步 · 主题系统 ========== */
 
-/* 默认主题：向日葵 🌻 */
 :root {
-  --background: 40 60% 98%;
-  --foreground: 30 20% 15%;
-  --card: 40 60% 100%;
-  --card-foreground: 30 20% 15%;
-  --popover: 40 60% 100%;
-  --popover-foreground: 30 20% 15%;
-  --primary: 38 92% 50%;
+  --background: 42 80% 97%;
+  --foreground: 35 25% 12%;
+  --card: 40 70% 100%;
+  --card-foreground: 35 25% 12%;
+  --popover: 40 70% 100%;
+  --popover-foreground: 35 25% 12%;
+  --primary: 38 95% 48%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 40 50% 90%;
-  --secondary-foreground: 30 20% 20%;
-  --muted: 40 30% 94%;
-  --muted-foreground: 30 10% 45%;
-  --accent: 35 100% 95%;
-  --accent-foreground: 30 20% 15%;
-  --destructive: 0 72% 55%;
+  --secondary: 42 55% 90%;
+  --secondary-foreground: 35 25% 18%;
+  --muted: 42 30% 93%;
+  --muted-foreground: 35 12% 42%;
+  --accent: 40 95% 94%;
+  --accent-foreground: 35 25% 12%;
+  --destructive: 0 70% 52%;
   --destructive-foreground: 0 0% 100%;
-  --border: 40 30% 85%;
-  --input: 40 30% 85%;
-  --ring: 38 92% 50%;
+  --border: 40 30% 83%;
+  --input: 40 30% 83%;
+  --ring: 38 95% 48%;
   --radius: 0.75rem;
-  --chart-1: 38 92% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 340 65% 60%;
-  --chart-4: 220 70% 60%;
-  --chart-5: 280 50% 55%;
 
-  /* 日历颜色 */
-  --day-complete: 160 84% 39%;
-  --day-partial: 38 92% 50%;
-  --day-incomplete: 0 72% 55%;
+  --day-complete: 155 75% 38%;
+  --day-partial: 38 92% 48%;
+  --day-incomplete: 0 70% 52%;
 
-  /* 字体 */
+  /* 主题装饰色 */
+  --deco-1: 48 100% 60%;
+  --deco-2: 38 90% 55%;
+  --progress-gradient: linear-gradient(90deg, #fbbf24, #f59e0b, #d97706);
+
   --font-sans: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
   --font-heading: 'Noto Serif SC', 'STSong', serif;
 
   font-family: var(--font-sans);
 }
 
-/* 樱花主题 🌸 */
+/* ====== 🌸 樱花 ====== */
 [data-theme="sakura"] {
-  --background: 340 40% 98%;
-  --foreground: 340 15% 20%;
-  --card: 340 30% 100%;
-  --card-foreground: 340 15% 20%;
-  --primary: 340 60% 65%;
+  --background: 340 35% 97%;
+  --foreground: 340 15% 18%;
+  --card: 340 25% 100%;
+  --card-foreground: 340 15% 18%;
+  --primary: 340 55% 63%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 340 30% 92%;
-  --accent: 340 50% 95%;
-  --border: 340 20% 88%;
-  --ring: 340 60% 65%;
-  --day-complete: 160 70% 45%;
-  --day-partial: 340 60% 65%;
-  --day-incomplete: 0 65% 58%;
+  --secondary: 340 25% 91%;
+  --secondary-foreground: 340 15% 20%;
+  --muted: 340 20% 93%;
+  --muted-foreground: 340 10% 48%;
+  --accent: 340 45% 94%;
+  --accent-foreground: 340 15% 18%;
+  --destructive: 0 62% 55%;
+  --border: 340 18% 87%;
+  --input: 340 18% 87%;
+  --ring: 340 55% 63%;
+
+  --day-complete: 155 62% 42%;
+  --day-partial: 340 55% 63%;
+  --day-incomplete: 0 60% 55%;
+
+  --deco-1: 340 65% 72%;
+  --deco-2: 350 55% 68%;
+  --progress-gradient: linear-gradient(90deg, #f9a8d4, #f472b6, #ec4899);
 }
 
-/* 新绿主题 🍃 */
+/* ====== 🍃 新绿 ====== */
 [data-theme="fresh"] {
-  --background: 140 30% 97%;
-  --foreground: 150 20% 16%;
-  --card: 140 25% 100%;
-  --card-foreground: 150 20% 16%;
-  --primary: 142 50% 40%;
+  --background: 140 28% 96%;
+  --foreground: 145 20% 15%;
+  --card: 140 22% 100%;
+  --card-foreground: 145 20% 15%;
+  --primary: 142 48% 36%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 140 25% 90%;
-  --accent: 140 35% 94%;
-  --border: 140 20% 86%;
-  --ring: 142 50% 40%;
-  --day-complete: 142 60% 35%;
-  --day-partial: 38 85% 48%;
-  --day-incomplete: 0 68% 55%;
+  --secondary: 140 22% 89%;
+  --secondary-foreground: 145 20% 18%;
+  --muted: 140 18% 92%;
+  --muted-foreground: 145 12% 42%;
+  --accent: 140 30% 93%;
+  --accent-foreground: 145 20% 15%;
+  --destructive: 0 60% 50%;
+  --border: 140 16% 85%;
+  --input: 140 16% 85%;
+  --ring: 142 48% 36%;
+
+  --day-complete: 142 55% 32%;
+  --day-partial: 38 82% 45%;
+  --day-incomplete: 0 62% 52%;
+
+  --deco-1: 142 50% 50%;
+  --deco-2: 130 40% 55%;
+  --progress-gradient: linear-gradient(90deg, #86efac, #4ade80, #22c55e);
 }
 
-/* 晚霞主题 🌅 */
+/* ====== 🌅 晚霞 ====== */
 [data-theme="sunset"] {
-  --background: 25 40% 96%;
-  --foreground: 25 20% 16%;
-  --card: 25 35% 100%;
-  --card-foreground: 25 20% 16%;
-  --primary: 18 80% 50%;
+  --background: 22 50% 95%;
+  --foreground: 20 25% 15%;
+  --card: 22 45% 99%;
+  --card-foreground: 20 25% 15%;
+  --primary: 15 75% 48%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 25 30% 88%;
-  --accent: 30 50% 93%;
-  --border: 25 20% 84%;
-  --ring: 18 80% 50%;
-  --day-complete: 160 60% 40%;
-  --day-partial: 35 90% 48%;
-  --day-incomplete: 10 70% 52%;
+  --secondary: 25 35% 87%;
+  --secondary-foreground: 20 25% 18%;
+  --muted: 25 25% 91%;
+  --muted-foreground: 20 14% 42%;
+  --accent: 30 55% 92%;
+  --accent-foreground: 20 25% 15%;
+  --destructive: 8 65% 50%;
+  --border: 25 22% 83%;
+  --input: 25 22% 83%;
+  --ring: 15 75% 48%;
+
+  --day-complete: 155 55% 38%;
+  --day-partial: 30 85% 45%;
+  --day-incomplete: 8 65% 50%;
+
+  --deco-1: 15 75% 55%;
+  --deco-2: 200 60% 50%;
+  --progress-gradient: linear-gradient(90deg, #fb923c, #f97316, #ea580c);
 }
 
-/* 抹茶主题 🫒 */
+/* ====== 🫒 抹茶 ====== */
 [data-theme="matcha"] {
-  --background: 80 20% 95%;
-  --foreground: 80 15% 18%;
-  --card: 80 15% 98%;
-  --card-foreground: 80 15% 18%;
-  --primary: 85 35% 38%;
+  --background: 82 22% 94%;
+  --foreground: 82 16% 16%;
+  --card: 82 15% 98%;
+  --card-foreground: 82 16% 16%;
+  --primary: 85 32% 36%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 80 15% 88%;
-  --accent: 85 25% 92%;
-  --border: 80 12% 82%;
-  --ring: 85 35% 38%;
-  --day-complete: 150 50% 38%;
-  --day-partial: 85 40% 45%;
-  --day-incomplete: 0 55% 55%;
+  --secondary: 82 16% 87%;
+  --secondary-foreground: 82 16% 20%;
+  --muted: 82 12% 90%;
+  --muted-foreground: 82 10% 42%;
+  --accent: 85 22% 91%;
+  --accent-foreground: 82 16% 16%;
+  --destructive: 0 52% 50%;
+  --border: 82 12% 82%;
+  --input: 82 12% 82%;
+  --ring: 85 32% 36%;
+
+  --day-complete: 150 45% 35%;
+  --day-partial: 85 40% 42%;
+  --day-incomplete: 0 50% 52%;
+
+  --deco-1: 85 30% 48%;
+  --deco-2: 82 25% 55%;
+  --progress-gradient: linear-gradient(90deg, #a3c293, #7ba05b, #5c8a3c);
 }
 
-/* 星夜主题 🌙 */
+/* ====== 🌙 星夜 ====== */
 [data-theme="starry"] {
-  --background: 240 15% 10%;
-  --foreground: 240 10% 92%;
-  --card: 240 15% 14%;
-  --card-foreground: 240 10% 92%;
-  --primary: 45 80% 55%;
-  --primary-foreground: 240 15% 10%;
-  --secondary: 240 10% 20%;
-  --accent: 240 15% 22%;
-  --border: 240 10% 25%;
-  --ring: 45 80% 55%;
-  --day-complete: 150 60% 48%;
-  --day-partial: 45 80% 55%;
-  --day-incomplete: 0 65% 55%;
+  --background: 235 18% 8%;
+  --foreground: 235 10% 90%;
+  --card: 235 15% 12%;
+  --card-foreground: 235 10% 90%;
+  --primary: 42 85% 55%;
+  --primary-foreground: 235 18% 8%;
+  --secondary: 235 12% 18%;
+  --secondary-foreground: 235 10% 90%;
+  --muted: 235 10% 16%;
+  --muted-foreground: 235 8% 55%;
+  --accent: 235 14% 20%;
+  --accent-foreground: 235 10% 90%;
+  --destructive: 0 55% 50%;
+  --border: 235 10% 22%;
+  --input: 235 10% 22%;
+  --ring: 42 85% 55%;
+
+  --day-complete: 150 55% 45%;
+  --day-partial: 42 85% 55%;
+  --day-incomplete: 0 55% 50%;
+
+  --deco-1: 42 90% 60%;
+  --deco-2: 220 60% 65%;
+  --progress-gradient: linear-gradient(90deg, #c4b5fd, #8b5cf6, #6366f1);
 }
 
-/* ========== 可爱卡通风格 · 基础样式 ========== */
+/* ========== 基础样式 ========== */
 body {
   margin: 0;
   background-color: hsl(var(--background));
@@ -135,74 +187,130 @@ body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 可爱的圆点背景纹理 */
-  background-image: radial-gradient(hsl(var(--primary) / 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
 }
 
 #root {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
-/* ========== 可爱风格的全局圆角 ========== */
-button, .rounded-xl, .rounded-2xl, .rounded-3xl {
-  /* 所有元素更圆润 */
+/* ========== 主题装饰背景（简洁点缀） ========== */
+
+/* 向日葵：小太阳圆点 */
+:root body,
+[data-theme=""] body {
+  background-image:
+    radial-gradient(circle at 15% 12%, hsl(48, 100%, 60%) 0px, transparent 18px),
+    radial-gradient(circle at 85% 8%, hsl(38, 90%, 55%) 0px, transparent 14px),
+    radial-gradient(hsl(42, 80%, 60% / 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+  background-repeat: no-repeat, no-repeat, repeat;
 }
 
-/* ========== 可爱的跳动动画 ========== */
+/* 樱花：粉色花瓣点 */
+[data-theme="sakura"] body {
+  background-image:
+    radial-gradient(circle at 12% 10%, hsl(340, 65%, 75% / 0.4) 0px, transparent 20px),
+    radial-gradient(circle at 88% 7%, hsl(350, 55%, 70% / 0.35) 0px, transparent 16px),
+    radial-gradient(circle at 50% 14%, hsl(340, 60%, 72% / 0.2) 0px, transparent 12px),
+    radial-gradient(hsl(340, 30%, 75% / 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+}
+
+/* 新绿：小草点缀 */
+[data-theme="fresh"] body {
+  background-image:
+    radial-gradient(ellipse at 10% 10%, hsl(142, 50%, 50% / 0.25) 0px, transparent 16px),
+    radial-gradient(ellipse at 90% 12%, hsl(130, 40%, 55% / 0.2) 0px, transparent 12px),
+    radial-gradient(hsl(140, 30%, 55% / 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 20px 20px;
+  background-repeat: no-repeat, no-repeat, repeat;
+}
+
+/* 晚霞：太阳与海交界渐变色 */
+[data-theme="sunset"] body {
+  background-image:
+    linear-gradient(180deg,
+      hsl(22, 50%, 95%) 0%,
+      hsl(18, 55%, 92%) 40%,
+      hsl(15, 60%, 85%) 65%,
+      hsl(200, 30%, 80%) 85%,
+      hsl(200, 35%, 72%) 100%
+    );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* 抹茶：茶点小圆 */
+[data-theme="matcha"] body {
+  background-image:
+    radial-gradient(circle at 15% 10%, hsl(85, 30%, 55% / 0.25) 0px, transparent 18px),
+    radial-gradient(circle at 82% 8%, hsl(82, 25%, 60% / 0.2) 0px, transparent 14px),
+    radial-gradient(hsl(85, 20%, 55% / 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 20px 20px;
+  background-repeat: no-repeat, no-repeat, repeat;
+}
+
+/* 星夜：左上角月亮 + 散落星星 */
+[data-theme="starry"] body {
+  background-image:
+    /* 左上角月亮 */
+    radial-gradient(circle at 18% 10%, hsl(42, 90%, 65% / 0.7) 0px, transparent 28px),
+    /* 遮盖月亮暗面 */
+    radial-gradient(circle at 20% 8%, hsl(235, 18%, 10%) 0px, transparent 22px),
+    /* 散落星星 */
+    radial-gradient(1px 1px at 30% 5%, hsl(42, 85%, 70% / 0.8), transparent),
+    radial-gradient(1px 1px at 55% 3%, hsl(220, 60%, 70% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 72% 8%, hsl(42, 85%, 72% / 0.7), transparent),
+    radial-gradient(1px 1px at 40% 12%, hsl(220, 55%, 68% / 0.5), transparent),
+    radial-gradient(1px 1px at 88% 4%, hsl(42, 80%, 70% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 62% 10%, hsl(220, 60%, 72% / 0.7), transparent),
+    radial-gradient(1px 1px at 50% 15%, hsl(200, 55%, 65% / 0.4), transparent),
+    radial-gradient(1px 1px at 78% 13%, hsl(42, 90%, 68% / 0.5), transparent);
+  background-size: 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ========== 跳动动画 ========== */
 @keyframes bounce-cute {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-3deg); }
-  75% { transform: rotate(3deg); }
-}
-
 @keyframes pop-in {
   0% { transform: scale(0.3); opacity: 0; }
   70% { transform: scale(1.05); }
   100% { transform: scale(1); opacity: 1; }
 }
-
-.bounce-cute:hover {
-  animation: bounce-cute 0.6s ease infinite;
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
-.pop-in {
-  animation: pop-in 0.4s ease-out;
-}
-
-/* ========== 滚动条美化 ========== */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 4px;
-}
+/* ========== 滚动条 ========== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 4px; }
 
 /* ========== 粒子画布 ========== */
 .particle-canvas {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
 }
 
-/* ========== 选中文本颜色 ========== */
-::selection {
-  background: hsl(var(--primary) / 0.3);
+/* ========== 文字选中 ========== */
+::selection { background: hsl(var(--primary) / 0.3); }
+
+/* ========== 底部安全区 ========== */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 8px); }
+
+/* ========== 主题进度条 ========== */
+.progress-themed {
+  background: var(--progress-gradient);
 }
 
-/* ========== 底部安全区域 ========== */
-.pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 8px);
+/* 星夜闪烁 */
+[data-theme="starry"] .starry-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
 }

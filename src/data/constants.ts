@@ -2,12 +2,12 @@
 import type { ThemeConfig } from './types'
 
 export const THEMES: ThemeConfig[] = [
-  { id: 'sunflower', name: '向日葵', emoji: '🌻', description: '明媚温暖' },
-  { id: 'sakura', name: '樱花', emoji: '🌸', description: '温柔浪漫' },
-  { id: 'fresh', name: '新绿', emoji: '🍃', description: '清新自然' },
-  { id: 'sunset', name: '晚霞', emoji: '🌅', description: '温暖深沉' },
-  { id: 'matcha', name: '抹茶', emoji: '🫒', description: '日系简约' },
-  { id: 'starry', name: '星夜', emoji: '🌙', description: '安静有力' },
+  { id: 'sunflower', name: '向日葵', emoji: '🌻', description: '阳光明亮' },
+  { id: 'sakura', name: '樱花', emoji: '🌸', description: '粉樱浪漫' },
+  { id: 'fresh', name: '新绿', emoji: '🍃', description: '青草自然' },
+  { id: 'sunset', name: '晚霞', emoji: '🌅', description: '海天交融' },
+  { id: 'matcha', name: '抹茶', emoji: '🫒', description: '茶点时光' },
+  { id: 'starry', name: '星夜', emoji: '🌙', description: '月明星稀' },
 ]
 
 export const ENCOURAGEMENTS: Record<string, string[]> = {

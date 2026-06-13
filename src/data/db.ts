@@ -14,7 +14,7 @@ export class WarmCalendarDB extends Dexie {
     this.version(2).stores({
       tasks: 'id, date, category, completed',
       recurringRules: 'id, taskTemplateId',
-      monthlyGoals: 'id, month',
+      monthlyGoals: 'id, startMonth, endMonth',
       yearlyGoals: 'id, startYear, endYear',
       settings: 'id'
     })

@@ -25,7 +25,7 @@ function CuteYearProgress({ rate }: { rate: number }) {
       </div>
       <div className="h-3 rounded-full bg-muted overflow-hidden">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-purple-400 via-amber-400 to-emerald-400 transition-all duration-700"
+          className="h-full rounded-full progress-themed transition-all duration-700"
           style={{ width: `${Math.max(rate, 3)}%` }}
         />
       </div>
@@ -236,7 +236,7 @@ export function YearPlan() {
                       </p>
                     </div>
                   )}
-                  {milestones.sort((a, b) => a.month.localeCompare(b.month)).map(m => (
+                  {milestones.sort((a, b) => a.startMonth.localeCompare(b.startMonth)).map(m => (
                     <div key={m.id} className="flex items-center gap-2 text-sm py-1">
                       <span className={cn(
                         'w-2 h-2 rounded-full shrink-0',
@@ -249,7 +249,7 @@ export function YearPlan() {
                         {m.title}
                       </span>
                       <span className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">
-                        {format(new Date(m.month + '-01'), 'M月', { locale: zhCN })}
+                        {format(new Date(m.startMonth + '-01'), 'M月', { locale: zhCN })}
                       </span>
                     </div>
                   ))}

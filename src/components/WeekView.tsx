@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { addDays, startOfWeek, format, isToday, isSameDay, subWeeks, addWeeks } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
@@ -22,8 +22,6 @@ export function WeekView() {
   const [newPriority, setNewPriority] = useState<Priority>('中')
   const [newTimeSlot, setNewTimeSlot] = useState<string | undefined>(undefined)
   const [showCelebration, setShowCelebration] = useState(false)
-  // 记录上一次渲染时已完成的任务 ID 集合（避免页面刷新/切换时误触发）
-  const prevCompletedIdsRef = useRef<Set<string> | null>(null)
 
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
@@ -57,34 +55,19 @@ export function WeekView() {
   const todayKey = format(selectedDate, 'yyyy-MM-dd')
   const todayTasks = tasks.filter(t => t.date === todayKey)
 
-  // 切换完成状态
+  // 切换完成状态（只有用户主动打勾时才检测庆祝）
   const toggleTask = async (id: string) => {
     const task = tasks.find(t => t.id === id)!
-    await db.tasks.update(id, { completed: !task.completed, updatedAt: new Date().toISOString() })
-    await loadTasks()
-  }
-
-  // 检测今日任务全完成 → 触发庆祝（仅在新完成时触发一次）
-  useEffect(() => {
-    const completedIds = new Set(todayTasks.filter(t => t.completed).map(t => t.id))
-    const allDone = todayTasks.length > 0 && completedIds.size === todayTasks.length
-
-    // 首次加载：只记录状态，不触发
-    if (prevCompletedIdsRef.current === null) {
-      prevCompletedIdsRef.current = completedIds
-      return
-    }
-
-    // 检查是否有新完成的任务（之前不在集合中，现在在）
-    const prevIds = prevCompletedIdsRef.current
-    const hasNewCompletion = Array.from(completedIds).some(id => !prevIds.has(id))
-
-    prevCompletedIdsRef.current = completedIds
-
-    if (allDone && hasNewCompletion) {
+    const newCompleted = !task.completed
+    await db.tasks.update(id, { completed: newCompleted, updatedAt: new Date().toISOString() })
+    // 先从本地状态计算（不等 loadTasks 返回）
+    const updated = tasks.map(t => t.id === id ? { ...t, completed: newCompleted } : t)
+    const dayTasks = updated.filter(t => t.date === todayKey)
+    if (newCompleted && dayTasks.length > 0 && dayTasks.every(t => t.completed)) {
       setShowCelebration(true)
     }
-  }, [todayTasks])
+    await loadTasks()
+  }
 
   // 删除任务
   const deleteTask = async (id: string) => {
@@ -109,7 +92,7 @@ export function WeekView() {
     }
     await db.tasks.add(task)
     setNewTitle('')
-    setNewTimeSlot('')
+    setNewTimeSlot(undefined)
     setShowAdd(false)
     await loadTasks()
   }

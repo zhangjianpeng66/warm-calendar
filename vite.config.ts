@@ -13,9 +13,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: '温暖日历',
-        short_name: '温暖日历',
-        description: '温暖活力风的个人任务管理日历',
+        name: '一小步',
+        short_name: '一小步',
+        description: '一小步 · 每一步都算数',
         theme_color: '#f59e0b',
         background_color: '#fff8f0',
         display: 'standalone',

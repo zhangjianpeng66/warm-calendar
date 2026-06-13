@@ -32,7 +32,8 @@ export interface RecurringRule {
 export interface MonthlyGoal {
   id: string
   title: string
-  month: string // YYYY-MM
+  startMonth: string // YYYY-MM
+  endMonth: string   // YYYY-MM（默认与startMonth相同）
   completed: boolean
   linkedYearlyGoalId?: string
   createdAt: string
