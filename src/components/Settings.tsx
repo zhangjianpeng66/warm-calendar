@@ -4,7 +4,7 @@ import { THEMES } from '@/data/constants'
 import { db } from '@/data/db'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Download, Upload, FileText, Image, Palette, Check, Smartphone } from 'lucide-react'
+import { Download, Upload, FileText, Image, Palette, Check, Smartphone, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function Settings() {
@@ -147,6 +147,34 @@ export function Settings() {
           </div>
         </section>
 
+        {/* 强制更新 */}
+        <section>
+          <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+            <RefreshCw size={14} />应用更新
+          </h3>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              // 1. 清除所有 PWA 缓存
+              if ('caches' in window) {
+                const keys = await caches.keys()
+                await Promise.all(keys.map(k => caches.delete(k)))
+              }
+              // 2. 注销所有 service worker
+              if ('serviceWorker' in navigator) {
+                const regs = await navigator.serviceWorker.getRegistrations()
+                await Promise.all(regs.map(r => r.unregister()))
+              }
+              // 3. 硬刷新
+              window.location.reload()
+            }}
+            className="w-full h-12 rounded-2xl text-base font-medium border-2 border-orange-300 text-orange-600 hover:bg-orange-50"
+          >
+            🔄 清除缓存并更新到最新版
+          </Button>
+        </section>
+
         {/* 数据导出 */}
         <section>
           <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
@@ -198,7 +226,7 @@ export function Settings() {
         {/* 关于 */}
         <section className="text-center pt-4">
           <p className="text-xs text-muted-foreground">
-            一小步 v1.3.1 · 每一步都算数
+            一小步 v1.3.2 · 每一步都算数
           </p>
         </section>
       </div>
