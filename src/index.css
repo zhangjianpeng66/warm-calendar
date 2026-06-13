@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* ========== 温暖日历 · 主题系统 ========== */
+
+/* 默认主题：向日葵 🌻 */
+:root {
+  --background: 40 60% 98%;
+  --foreground: 30 20% 15%;
+  --card: 40 60% 100%;
+  --card-foreground: 30 20% 15%;
+  --popover: 40 60% 100%;
+  --popover-foreground: 30 20% 15%;
+  --primary: 38 92% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 50% 90%;
+  --secondary-foreground: 30 20% 20%;
+  --muted: 40 30% 94%;
+  --muted-foreground: 30 10% 45%;
+  --accent: 35 100% 95%;
+  --accent-foreground: 30 20% 15%;
+  --destructive: 0 72% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 40 30% 85%;
+  --input: 40 30% 85%;
+  --ring: 38 92% 50%;
+  --radius: 0.75rem;
+  --chart-1: 38 92% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 340 65% 60%;
+  --chart-4: 220 70% 60%;
+  --chart-5: 280 50% 55%;
+
+  /* 日历颜色 */
+  --day-complete: 160 84% 39%;
+  --day-partial: 38 92% 50%;
+  --day-incomplete: 0 72% 55%;
+
+  /* 字体 */
+  --font-sans: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Noto Serif SC', 'STSong', serif;
+
+  font-family: var(--font-sans);
+}
+
+/* 樱花主题 🌸 */
+[data-theme="sakura"] {
+  --background: 340 40% 98%;
+  --foreground: 340 15% 20%;
+  --card: 340 30% 100%;
+  --card-foreground: 340 15% 20%;
+  --primary: 340 60% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 340 30% 92%;
+  --accent: 340 50% 95%;
+  --border: 340 20% 88%;
+  --ring: 340 60% 65%;
+  --day-complete: 160 70% 45%;
+  --day-partial: 340 60% 65%;
+  --day-incomplete: 0 65% 58%;
+}
+
+/* 新绿主题 🍃 */
+[data-theme="fresh"] {
+  --background: 140 30% 97%;
+  --foreground: 150 20% 16%;
+  --card: 140 25% 100%;
+  --card-foreground: 150 20% 16%;
+  --primary: 142 50% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 140 25% 90%;
+  --accent: 140 35% 94%;
+  --border: 140 20% 86%;
+  --ring: 142 50% 40%;
+  --day-complete: 142 60% 35%;
+  --day-partial: 38 85% 48%;
+  --day-incomplete: 0 68% 55%;
+}
+
+/* 晚霞主题 🌅 */
+[data-theme="sunset"] {
+  --background: 25 40% 96%;
+  --foreground: 25 20% 16%;
+  --card: 25 35% 100%;
+  --card-foreground: 25 20% 16%;
+  --primary: 18 80% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 25 30% 88%;
+  --accent: 30 50% 93%;
+  --border: 25 20% 84%;
+  --ring: 18 80% 50%;
+  --day-complete: 160 60% 40%;
+  --day-partial: 35 90% 48%;
+  --day-incomplete: 10 70% 52%;
+}
+
+/* 抹茶主题 🫒 */
+[data-theme="matcha"] {
+  --background: 80 20% 95%;
+  --foreground: 80 15% 18%;
+  --card: 80 15% 98%;
+  --card-foreground: 80 15% 18%;
+  --primary: 85 35% 38%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 80 15% 88%;
+  --accent: 85 25% 92%;
+  --border: 80 12% 82%;
+  --ring: 85 35% 38%;
+  --day-complete: 150 50% 38%;
+  --day-partial: 85 40% 45%;
+  --day-incomplete: 0 55% 55%;
+}
+
+/* 星夜主题 🌙 */
+[data-theme="starry"] {
+  --background: 240 15% 10%;
+  --foreground: 240 10% 92%;
+  --card: 240 15% 14%;
+  --card-foreground: 240 10% 92%;
+  --primary: 45 80% 55%;
+  --primary-foreground: 240 15% 10%;
+  --secondary: 240 10% 20%;
+  --accent: 240 15% 22%;
+  --border: 240 10% 25%;
+  --ring: 45 80% 55%;
+  --day-complete: 150 60% 48%;
+  --day-partial: 45 80% 55%;
+  --day-incomplete: 0 65% 55%;
+}
+
+/* ========== 基础样式 ========== */
+body {
+  margin: 0;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 滚动条美化 ========== */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+/* ========== 粒子画布 ========== */
+.particle-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
